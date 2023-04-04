@@ -6,6 +6,8 @@ import { selectContacts } from 'redux/selectors';
 import { nanoid } from 'nanoid';
 import css from './ContactForm.module.css';
 
+import { getContacts, sendContact } from '../../service/contactsApi';
+
 export function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
@@ -15,6 +17,7 @@ export function ContactForm() {
     const { name, value } = event.currentTarget;
     if (name === 'name') setName(value);
     if (name === 'number') setNumber(value);
+    getContacts();
   };
 
   const makeContact = () => {
@@ -28,6 +31,9 @@ export function ContactForm() {
   const contacts = useSelector(selectContacts);
   const handleSubmit = eventSubmit => {
     eventSubmit.preventDefault();
+
+    sendContact();
+
     const alertState = contacts.find(contact => contact.name === name);
     if (!alertState) {
       dispatch(addContact(makeContact()));
