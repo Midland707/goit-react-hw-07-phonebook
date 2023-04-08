@@ -24,8 +24,9 @@ export function App() {
     <div className={css.section}>
       <h1 className={css.title}>Phonebook</h1>
       <ContactForm />
-      {isLoading && !error && <b>Request in progress...</b>}
-      {contacts.length === 0 ? (
+      {isLoading && !error ? (
+        <b>Request in progress...</b>
+      ) : contacts.length === 0 ? (
         <div>Contacts list is empty ... </div>
       ) : (
         <>
