@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
+import { addContact } from '../../redux/operations';
 import { useSelector } from 'react-redux';
 import { selectContacts } from 'redux/selectors';
 import css from './ContactForm.module.css';
-
-import { sendContact } from '../../redux/operations';
 
 export function ContactForm() {
   const [name, setName] = useState('');
@@ -31,7 +29,7 @@ export function ContactForm() {
     const alertState = contacts.find(contact => contact.name === name);
     if (!alertState) {
       dispatch(addContact(makeContact()));
-      sendContact(makeContact());
+      // addContact(makeContact());
       eventSubmit.target.reset();
     } else alert(`${name} is already in contacts`);
   };
