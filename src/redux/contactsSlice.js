@@ -1,6 +1,5 @@
-// import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-// import { getContacts } from '../service/contactsApi';
+import { getContacts } from './operations';
 
 const contactsInitialState = {
   contactItems: [],
@@ -16,7 +15,11 @@ const contactsSlice = createSlice({
   name: 'contacts',
   initialState: contactsInitialState,
   reducers: {
-    fetchContacts: {},
+    fetchContacts: {
+      reducer(state, action) {
+        state.contactItems = action.payload;
+      },
+    },
     addContact: {
       reducer(state, action) {
         state.contactItems = [...state.contactItems, action.payload];
@@ -27,8 +30,23 @@ const contactsSlice = createSlice({
         contact => contact.id !== action.payload
       );
     },
+    extraReducers: {
+      [getContacts.pending](state) {
+        state.isLoading = true;
+      },
+      [getContacts.fulfilled](state, action) {
+        state.isLoading = false;
+        state.error = null;
+        state.contactItems = action.payload;
+      },
+      [getContacts.rejected](state, action) {
+        state.isLoading = false;
+        state.error = action.payload;
+      },
+    },
   },
 });
 
-export const { addContact, deleteContacts } = contactsSlice.actions;
+export const { fetchContacts, addContact, deleteContacts } =
+  contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;

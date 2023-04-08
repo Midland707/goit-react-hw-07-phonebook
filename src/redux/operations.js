@@ -8,24 +8,22 @@
 // addContact - додавання контакту (метод POST). Базовий тип екшену "contacts/addContact".
 // deleteContact - видалення контакту (метод DELETE). Базовий тип екшену "contacts/deleteContact".
 
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://642c888e66a20ec9ce8a147d.mockapi.io/';
 
-//   https://642c888e66a20ec9ce8a147d.mockapi.io/contacts/:endpoint
-
-// Performing a POST request
-
-// axios.post('/user', {
-//     firstName: 'Fred',
-//     lastName: 'Flintstone'
-//   })
-//   .then(function (response) {
-//     console.log(response);
-//   })
-//   .catch(function (error) {
-//     console.log(error);
-//   });
+export const getContacts = createAsyncThunk(
+  'contacts/fetchContacts',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axios.get('/contacts');
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
 
 // export const getContacts = async (query, page) => {
 //   const { data } = await axios.get(`?key=${key}&q=${query}&page=${page}`);
@@ -37,25 +35,25 @@ axios.defaults.baseURL = 'https://642c888e66a20ec9ce8a147d.mockapi.io/';
 // url.searchParams.append('completed', false); //https://PROJECT_TOKEN.mockapi.io/tasks?completed=false
 
 const url = new URL('https://642c888e66a20ec9ce8a147d.mockapi.io/contacts');
-export const getContacts = () =>
-  fetch(url, {
-    method: 'GET',
-    headers: { 'content-type': 'application/json' },
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      // handle error
-    })
-    .then(data => {
-      console.log(data);
-      // mockapi returns only incomplete tasks
-    })
-    .catch(error => {
-      console.log(error);
-      // handle error
-    });
+// export const getContacts = () =>
+//   fetch(url, {
+//     method: 'GET',
+//     headers: { 'content-type': 'application/json' },
+//   })
+//     .then(res => {
+//       if (res.ok) {
+//         return res.json();
+//       }
+//       // handle error
+//     })
+//     .then(data => {
+//       console.log(data);
+//       // mockapi returns only incomplete tasks
+//     })
+//     .catch(error => {
+//       console.log(error);
+//       // handle error
+//     });
 
 const newTask = {
   name: 'Vasia',

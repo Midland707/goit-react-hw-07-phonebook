@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectContacts } from 'redux/selectors';
 import css from './ContactForm.module.css';
 
-import { sendContact } from '../../service/contactsApi';
+import { sendContact } from '../../redux/operations';
 
 export function ContactForm() {
   const [name, setName] = useState('');
@@ -28,12 +28,10 @@ export function ContactForm() {
   const contacts = useSelector(selectContacts);
   const handleSubmit = eventSubmit => {
     eventSubmit.preventDefault();
-
-    sendContact();
-
     const alertState = contacts.find(contact => contact.name === name);
     if (!alertState) {
       dispatch(addContact(makeContact()));
+      sendContact(makeContact());
       eventSubmit.target.reset();
     } else alert(`${name} is already in contacts`);
   };
